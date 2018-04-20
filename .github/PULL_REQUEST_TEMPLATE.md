@@ -1,6 +1,8 @@
 ![](https://camo.githubusercontent.com/cf373500dfe17773807191f7fb730ea7ea4b959d/68747470733a2f2f692e696d6775722e636f6d2f5878585a6b6d4f2e706e67)
 
-## Review Process:
+## Ticket Reference ([View Current Issues Here](https://github.com/Habicus/Habicus-Core/issues))
+My Issue Number Is: #
+
 
 ##### Core Reviewers:
 @Habicus/core-team
@@ -12,7 +14,7 @@
 @schachte
 
 ## Status
-**Ready/WIP/Blocked***
+**Ready/WIP/Blocked**
 
 ## Description
 A few sentences describing the overall goals of the pull request's commits.
@@ -32,12 +34,4 @@ other_pr_master | [link]()
 - [ ] Documentation
 
 ## Steps to Test or Reproduce
-Outline the steps to test or reproduce the PR here.
-
-
-1. 
-
-## Impacted Areas in Application
-List general components of the application that this PR will affect:
-
-* 
+1.
