@@ -69,7 +69,7 @@ task dev(type: org.springframework.boot.gradle.tasks.run.BootRun, dependsOn: 'bu
 
 /**
  * Understanding Usage:
- * gradle prod (runs dev server)
+ * gradle prod (runs prod server)
  * TODO: Create PROD Profile
  */
 task prod(type: org.springframework.boot.gradle.tasks.run.BootRun, dependsOn: 'build') {
@@ -79,6 +79,4 @@ task prod(type: org.springframework.boot.gradle.tasks.run.BootRun, dependsOn: 'b
         systemProperty 'spring.profiles.active', 'prod'
     }
 }
-
-tasks.bootRun.dependsOn build
 
