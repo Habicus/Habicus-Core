@@ -31,7 +31,17 @@ Are you tired of writing down goals only to fail days or weeks later? Habitate i
 
 In order to get the server running, run the following command:
 ```
-gradle -Dspring.profiles.active=development bootRun
+gradle dev
+```
+
+To enable debug
+```
+gradle dev -Pdebug
+```
+
+All files must have the proper formatting + headers, if you get a verification failure
+```
+gradle spotlessApply
 ```
 
 Profiles are currently setup in the application property files in the `resources` directory
