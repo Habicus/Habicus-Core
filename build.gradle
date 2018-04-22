@@ -1,19 +1,19 @@
 buildscript {
-	ext {
-		springBootVersion = '2.0.1.RELEASE'
-	}
+    ext {
+        springBootVersion = '2.0.1.RELEASE'
+    }
 
-	repositories {
-		mavenCentral()
-		jcenter()
-	}
-	dependencies {
-		classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
-	}
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    }
 }
 
 plugins {
-	id "com.diffplug.gradle.spotless" version "3.10.0"
+    id "com.diffplug.gradle.spotless" version "3.10.0"
 }
 
 apply plugin: 'java'
@@ -22,10 +22,10 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'maven'
 
 spotless {
-	java {
-		googleJavaFormat()
-		licenseHeaderFile 'habicus.license.java'
-	}
+    java {
+        googleJavaFormat()
+        licenseHeaderFile 'habicus.license.java'
+    }
 }
 
 group = 'com.remindful'
@@ -33,27 +33,52 @@ version = '1.0.0-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {
-	mavenCentral()
-	jcenter()
+    mavenCentral()
+    jcenter()
 }
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-jersey')
-	compile('org.springframework.boot:spring-boot-starter-web')
-	compile('org.springframework.boot:spring-boot-starter-web-services')
-	compile('org.springframework.boot:spring-boot-starter-websocket')
-	compile('org.springframework.session:spring-session-core')
-	compile("com.h2database:h2")
-	compile 'org.springframework.boot:spring-boot-starter-data-jpa'
-	compile group: 'com.google.guava', name: 'guava', version: '11.0.2'
-	testCompile 'junit:junit:4.12'
-	testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.0.1.RELEASE'
+    compile('org.springframework.boot:spring-boot-starter-jersey')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-starter-web-services')
+    compile('org.springframework.boot:spring-boot-starter-websocket')
+    compile('org.springframework.session:spring-session-core')
+    compile("com.h2database:h2")
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+
+    testCompile 'junit:junit:4.12'
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.0.1.RELEASE'
 }
 
-// To force debug on application boot, switch suspend to y
-bootRun {
-	systemProperties System.properties
-	jvmArgs=["-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"]
+/**
+ * Understanding Usage:
+ * gradle dev (runs dev server)
+ * gradle dev -Pdebug (runs dev server with debug)
+ */
+task dev(type: org.springframework.boot.gradle.tasks.run.BootRun, dependsOn: 'build') {
+    doFirst() {
+        if (project.hasProperty('debug')) {
+            systemProperties System.properties
+            jvmArgs = ["-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005"]
+        }
+        main = 'com.habicus.CoreApplication'
+        classpath = sourceSets.main.runtimeClasspath
+        systemProperty 'spring.profiles.active', 'development'
+    }
+}
+
+/**
+ * Understanding Usage:
+ * gradle prod (runs dev server)
+ * TODO: Create PROD Profile
+ */
+task prod(type: org.springframework.boot.gradle.tasks.run.BootRun, dependsOn: 'build') {
+    doFirst() {
+        main = 'com.habicus.CoreApplication'
+        classpath = sourceSets.main.runtimeClasspath
+        systemProperty 'spring.profiles.active', 'prod'
+    }
 }
 
 tasks.bootRun.dependsOn build
+
