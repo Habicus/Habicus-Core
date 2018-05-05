@@ -24,14 +24,18 @@ package com.habicus.core.service.User;
 
 import com.habicus.core.dao.repository.UserRepository;
 import com.habicus.core.model.User;
+import java.security.Principal;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
-public class UserService {
+@Service("userDetailsService")
+public class UserService implements UserDetailsService {
 
   @Autowired UserRepository userRepository;
 
@@ -64,5 +68,21 @@ public class UserService {
 
     return new org.springframework.security.core.userdetails.User(
         returnedUser.getUsername(), returnedUser.getPassword(), Collections.emptyList());
+  }
+
+  /**
+   * Verifies that the user exists off the current auth token and returns the {@link User#userId}
+   *
+   * @param principal
+   * @return
+   */
+  public int verifyAndRetrieveUser(Principal principal) {
+    Optional<User> user = userRepository.findUserByUsername(principal.getName());
+
+    if (user.isPresent()) {
+      return user.get().getUserId();
+    }
+
+    throw new UsernameNotFoundException("User does not exist!");
   }
 }

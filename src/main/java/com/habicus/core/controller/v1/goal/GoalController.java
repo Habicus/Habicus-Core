@@ -37,7 +37,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -62,23 +61,22 @@ public class GoalController {
   }
 
   /**
-   * Allows retrieval by a single userId for getting goals
+   * Allows retrieval of user goals based on sec. token
    *
-   * @param userId
    * @return
    * @throws NoGoalsFoundException
    */
   @ExceptionHandler(NoGoalsFoundException.class)
-  @GetMapping("/goal/{userId}")
-  public ResponseEntity<List<Goal>> retrieveUserGoals(
-      @PathVariable(value = "id") int userId, Principal principal) throws NoGoalsFoundException {
-
+  @GetMapping("/goals")
+  public ResponseEntity<List<Goal>> retrieveUserGoals(Principal principal)
+      throws NoGoalsFoundException {
     LOGGER.info("Current querying for all goals on user: " + principal.getName());
 
+    int userId = userService.verifyAndRetrieveUser(principal);
     Optional<List<Goal>> goalList = goalService.retrieveGoalsByUserId(userId);
     if (!goalList.isPresent()) {
       throw new InvalidRequestException(
-          String.format("No goals found for requesting user: " + userId), HttpStatus.NOT_FOUND);
+          String.format("No goals found for requesting user: " + 1), HttpStatus.NOT_FOUND);
     }
     return new ResponseEntity<>(goalList.get(), HttpStatus.OK);
   }
