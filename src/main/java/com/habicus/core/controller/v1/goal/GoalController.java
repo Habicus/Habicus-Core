@@ -76,7 +76,7 @@ public class GoalController {
     Optional<List<Goal>> goalList = goalService.retrieveGoalsByUserId(userId);
     if (!goalList.isPresent()) {
       throw new InvalidRequestException(
-          String.format("No goals found for requesting user: " + 1), HttpStatus.NOT_FOUND);
+          String.format("No goals found for requesting user: " + principal.getName() + ":" + userId), HttpStatus.NOT_FOUND);
     }
     return new ResponseEntity<>(goalList.get(), HttpStatus.OK);
   }
