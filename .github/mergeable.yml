@@ -1,6 +1,0 @@
-mergeable:
-  # Minimum of 1 approvals is needed.
-  approvals: 1
-
-  # Block WIP PRs
-  title: 'wip|WIP'
